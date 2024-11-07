@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box, Button, TextField, Modal, Typography, CircularProgress, Alert} from '@mui/material';
-import axios from 'axios';
+import MockupsAxios from '../axios/MockupsAxios'
 import { useNavigate } from 'react-router-dom';
 
 const CreateMockupLibraryForm = () => {
@@ -17,7 +17,7 @@ const CreateMockupLibraryForm = () => {
     setModalOpen(true);
   
     try {
-      await axios.post('http://localhost:8000/api/v1/mockups/library/', {
+      await MockupsAxios.post('/library/', {
         title,
         description,
         mockups: [], // Include an empty mockups array as expected by the API

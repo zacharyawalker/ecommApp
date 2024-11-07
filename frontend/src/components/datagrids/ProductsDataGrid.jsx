@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import ProductAxios from '../axios/ProductsAxios'
 import { DataGrid } from '@mui/x-data-grid';
 import { IconButton, Avatar } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,7 +14,7 @@ function ProductsDataGrid() {
 
   useEffect(() => {
     // Fetch all products
-    axios.get('http://localhost:8000/api/v1/products/')
+    ProductAxios.get('/')
       .then((response) => setProducts(response.data))
       .catch((error) => console.error('Error fetching products:', error));
   }, []);
@@ -23,7 +23,7 @@ function ProductsDataGrid() {
   const fetchCategoryTitle = async (categoryId) => {
     if (!categoryTitles[categoryId]) {
       try {
-        const response = await axios.get(`http://localhost:8000/api/v1/products/categories/${categoryId}`);
+        const response = await ProductAxios.get(`/categories/${categoryId}`);
         setCategoryTitles((prevTitles) => ({
           ...prevTitles,
           [categoryId]: response.data.title,

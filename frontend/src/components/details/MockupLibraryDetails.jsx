@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import MockupsAxios from '../axios/MockupsAxios';
 import { Box, Card, CardContent, CardMedia, Typography, Divider, Chip, IconButton, Modal, Button, Snackbar, Alert } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -19,7 +19,7 @@ const MockupLibraryDetails = () => {
 
   const fetchLibrary = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/v1/mockups/library/${libraryId}/`);
+      const response = await MockupsAxios.get(`/library/${libraryId}/`);
       setLibrary(response.data);
     } catch (error) {
       console.error("Error fetching library:", error);
@@ -33,7 +33,7 @@ const MockupLibraryDetails = () => {
 
   const handleConfirmRemove = async () => {
     try {
-      await axios.post(`http://localhost:8000/api/v1/mockups/library/${libraryId}/remove_mockup/`, {
+      await MockupsAxios.post(`/library/${libraryId}/remove_mockup/`, {
         mockup_id: selectedMockupId,
       });
 

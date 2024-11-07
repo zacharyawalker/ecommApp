@@ -1,7 +1,7 @@
 
 import { AppProvider, SignInPage } from '@toolpad/core';
 import { useTheme } from '@mui/material/styles';
-import axios from 'axios'
+import AuthAxios from '../axios/AuthAxios';
 
 
 const providers = [{ id: 'credentials', name: 'Email and Password' }];
@@ -13,7 +13,7 @@ const signIn = async (provider, formData) => {
 
   try {
     // Send a POST request to your Django backend for authentication
-    const response = await axios.post('http://127.0.0.1:8000/api/v1/auth/login/', {
+    const response = await AuthAxios.post('/login/', {
       email,
       password,
     });

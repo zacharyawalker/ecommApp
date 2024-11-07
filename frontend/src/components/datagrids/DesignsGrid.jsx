@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import DesignsAxios from '../../axios/DesignsAxios';
+import DesignsAxios from '../axios/DesignsAxios'
 import { DataGrid } from '@mui/x-data-grid';
 import { IconButton, Box, Alert } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -30,7 +30,7 @@ const DesignsGrid = () => {
 
   const fetchDesigns = async () => {
     try {
-      const response = await DesignsAxios.get('');
+      const response = await DesignsAxios.get('/');
       setDesigns(response.data);
       setLoading(false);
     } catch (error) {

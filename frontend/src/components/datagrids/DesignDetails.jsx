@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import DesignsAxios from '../axios/DesignsAxios';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Typography, Box, CircularProgress, TextField, Button, Grid, Chip, IconButton } from '@mui/material';
+import { Typography, Box, CircularProgress, TextField, Button, Grid} from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const DesignDetails = () => {
@@ -19,7 +19,7 @@ const DesignDetails = () => {
 
   const fetchDesignDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/v1/designs/${design_id}`);
+      const response = await DesignsAxios.get(`/${design_id}/`);
       setDesign(response.data);
       setFormData({ title: response.data.title, description: response.data.description });
       setLoading(false);
@@ -32,7 +32,7 @@ const DesignDetails = () => {
   const handleEditClick = () => setEditMode(true);
   const handleSaveClick = async () => {
     try {
-      await axios.put(`http://localhost:8000/api/v1/designs/${design_id}`, formData);
+      await DesignsAxios.put(`/${design_id}/`, formData);
       setDesign({ ...design, ...formData });
       setEditMode(false);
     } catch (error) {
@@ -44,21 +44,6 @@ const DesignDetails = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-  // const getStatusColor = (status) => {
-  //   switch (status) {
-  //     case 'New':
-  //       return 'orange';
-  //     case 'In Progress':
-  //       return 'blue';
-  //     case 'Published':
-  //       return 'green';
-  //     case 'Retired':
-  //       return 'black';
-  //     default:
-  //       return 'gray';
-  //   }
-  // };
 
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">{error}</Typography>;

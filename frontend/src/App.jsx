@@ -11,6 +11,7 @@ import MockupLibraries from './components/pages/MockupLibraries.jsx';
 import MockupLibraryDetails from './components/details/MockupLibraryDetails.jsx';
 import Products from './components/pages/Products.jsx';
 import CreateMockupLibrary from './components/pages/CreateMockupLibrary.jsx';
+import Sandbox from './components/pages/Sandbox.jsx';
 
 function App() {
   const location = useLocation();
@@ -28,6 +29,7 @@ function App() {
             content={
               <Routes>
                 <Route path='/apphome' element={<AppHome />} />
+                <Route path='/apphome' element={<AppHome />} />
                 <Route path='/designs' element={<Designs />} />
                 <Route path="/designs/:design_id" element={<DesignDetails />} />
                 <Route path="/designs/new" element={<CreateDesignForm />} />
@@ -37,6 +39,10 @@ function App() {
                 <Route path="/mockups/libraries/:libraryId" element={<MockupLibraryDetails />} />
                 <Route path="/mockups/libraries/new" element={<CreateMockupLibrary />} />
                 <Route path='/products' element={<Products />} />
+
+
+
+                <Route path='/sandbox' element={<Sandbox />} />
               </Routes>
             }
           />

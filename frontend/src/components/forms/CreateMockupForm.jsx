@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography, IconButton, Select, MenuItem, FormControl, InputLabel, Modal, LinearProgress } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import axios from 'axios';
+import MockupsAxios from '../axios/MockupsAxios'
 import { useNavigate } from 'react-router-dom';
 
 const CreateMockupForm = () => {
@@ -25,7 +25,7 @@ const CreateMockupForm = () => {
 
   const fetchColorOptions = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/v1/mockups/color/');
+      const response = await MockupsAxios.get('/color/');
       setColorOptions(response.data);
     } catch (error) {
       console.error("Error fetching colors:", error);
@@ -34,7 +34,7 @@ const CreateMockupForm = () => {
 
   const fetchCategoryOptions = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/v1/mockups/categories/');
+      const response = await MockupsAxios.get('/categories/');
       setCategoryOptions(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -67,7 +67,7 @@ const CreateMockupForm = () => {
     formData.append('mockup_box_image', mockupBoxImage);
 
     try {
-      await axios.post('http://localhost:8000/api/v1/mockups/', formData, {
+      await MockupsAxios.post('/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
