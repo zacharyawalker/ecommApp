@@ -39,6 +39,6 @@ class Design(models.Model):
             super().save(update_fields=['design_image', 'design_relative_path', 'file_name'])
             
     def __str__(self):
-        return f"Title: {self.title}"
+        return self.title
 
 

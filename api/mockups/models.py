@@ -26,6 +26,7 @@ class Color(models.Model):
 class Mockup(models.Model):
     class GenderChoices(models.TextChoices):
         Neutral = "Neutral"
+        Unisex = "Unisex"
         Male = "Male"
         Female = "Female"
         Coed = "Coed"

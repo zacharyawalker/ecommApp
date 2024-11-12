@@ -3,6 +3,7 @@ from .models import *
 from mockups.serializers import *
 
 
+
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
@@ -17,11 +18,23 @@ class ProductLibraryImageSerializer(serializers.ModelSerializer):
 class ProductsSerializer(serializers.ModelSerializer):
     product_images = ProductImageSerializer(many=True, read_only=True)
     library_product_images = ProductLibraryImageSerializer(many=True, read_only=True)
+    product_category = serializers.SerializerMethodField()
+    
 
     class Meta:
         model = Product
         #fields = ['id', 'title', 'description', 'status', 'created_on', 'designs', 'mockups', 'mockup_libraries', 'product_images', 'library_product_images']
         fields = "__all__"
+
+    def get_product_category(self, obj):
+        if self.context.get('simple'):
+            return obj.product_category.id if obj.product_category else None
+        if obj.product_category:
+            return {
+                "id": obj.product_category.id,
+                "title": obj.product_category.title
+            }
+        return None
 
 class ProductsCreateUpdateSerializer(serializers.ModelSerializer):
     # Allow updating mockups and mockup_libraries by primary key IDs
@@ -29,6 +42,7 @@ class ProductsCreateUpdateSerializer(serializers.ModelSerializer):
     mockup_libraries = serializers.PrimaryKeyRelatedField(queryset=MockupLibrary.objects.all(), many=True, required=False)
     product_images = ProductImageSerializer(many=True, read_only=True)
     library_product_images = ProductLibraryImageSerializer(many=True, read_only=True)
+    
 
     class Meta:
         model = Product

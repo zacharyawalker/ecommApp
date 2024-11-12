@@ -17,6 +17,7 @@ const CreateMockupForm = () => {
   const [boxPreview, setBoxPreview] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [gender, setGender] = useState('Neutral');
 
   useEffect(() => {
     fetchColorOptions();
@@ -62,7 +63,7 @@ const CreateMockupForm = () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('color', selectedColor);
-    formData.append('product_category', selectedCategory);
+    formData.append('mockup_category', selectedCategory);
     formData.append('mockup_image', mockupImage);
     formData.append('mockup_box_image', mockupBoxImage);
 
@@ -116,7 +117,20 @@ const CreateMockupForm = () => {
           ))}
         </Select>
       </FormControl>
-      
+      <FormControl fullWidth variant="outlined" margin="normal">
+        <InputLabel>Gender</InputLabel>
+        <Select
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            label="Gender"
+            required
+        >
+            <MenuItem value="Neutral">Neutral</MenuItem>
+            <MenuItem value="Unisex">Unisex</MenuItem>
+            <MenuItem value="Male">Male</MenuItem>
+            <MenuItem value="Female">Female</MenuItem>
+        </Select>
+    </FormControl>
       {/* Product Category Dropdown */}
       <FormControl fullWidth variant="outlined" margin="normal">
         <InputLabel>Product Category</InputLabel>

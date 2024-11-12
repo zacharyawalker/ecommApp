@@ -92,7 +92,6 @@ from .models import *
 from mockups.models import *
 from mockups.utils import create_single_mockup, create_library_mockup
 
-
 @receiver(post_save, sender=Product)
 def handle_product_creation(sender, instance, created, **kwargs):
     if created and instance.designs and instance.mockups.exists():
@@ -222,3 +221,29 @@ def handle_mockup_library_assignment(sender, instance, action, **kwargs):
 
             except MockupLibrary.DoesNotExist:
                 logging.error(f"MockupLibrary with ID {library_id} does not exist.")
+
+
+
+@receiver(m2m_changed, sender=Product.mockups.through)
+def remove_mockup_images_on_mockup_remove(sender, instance, action, pk_set, **kwargs):
+    """
+    When a mockup is removed from a product, delete the associated ProductImage record and image file.
+    """
+    if action == "post_remove":
+        for mockup_id in pk_set:
+            try:
+                # Find the ProductImage associated with this product and mockup
+                product_image = ProductImage.objects.get(product=instance, mockup_id=mockup_id)
+
+                # Delete the file from the file system
+                if product_image.image_path:
+                    image_path = os.path.join(settings.MEDIA_ROOT, product_image.image_path.name)
+                    if os.path.isfile(image_path):
+                        os.remove(image_path)
+                
+                # Delete the ProductImage record
+                product_image.delete()
+
+            except ProductImage.DoesNotExist:
+                # If there's no matching ProductImage, we can safely ignore
+                continue
