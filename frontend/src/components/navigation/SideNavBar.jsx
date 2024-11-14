@@ -145,12 +145,12 @@ export default function SideNavBar(props) {
                     <span className={styles.sideBarLink}>All Designs</span>
                   </ListItemButton>
                 </ListItem>
-                <ListItem disablePadding>
+                {/* <ListItem disablePadding>
                   <ListItemButton component={Link} to="/designs/new" selected={'/designs/new' === path}>
                     <ListItemIcon />
                     <span className={styles.sideBarLink}>New Design</span>
                   </ListItemButton>
-                </ListItem>
+                </ListItem> */}
               </Box>
             )}
 
@@ -179,12 +179,12 @@ export default function SideNavBar(props) {
                     <span className={styles.sideBarLink}>All Mockups</span>
                   </ListItemButton>
                 </ListItem>
-                <ListItem disablePadding>
+                {/* <ListItem disablePadding>
                   <ListItemButton component={Link} to="/mockups/new" selected={'/mockups/new' === path}>
                     <ListItemIcon />
                     <span className={styles.sideBarLink}>New Mockup</span>
                   </ListItemButton>
-                </ListItem>
+                </ListItem> */}
                 <ListItem disablePadding>
                   <ListItemButton component={Link} to="/mockups/libraries" selected={'/mockups/new' === path}>
                     <ListItemIcon />

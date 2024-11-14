@@ -9,4 +9,7 @@ router.register(r'', ProductsViewSet, basename='products')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('<int:product_id>/download_mockups/', download_all_mockups, name='download_mockups'),
+    path('libraries/<int:library_id>/download_mockups/', download_library_mockups, name='download_library_mockups'),
 ]
+

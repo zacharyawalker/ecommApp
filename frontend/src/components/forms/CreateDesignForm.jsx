@@ -3,6 +3,7 @@ import { TextField, Button, Box, Typography, IconButton, Modal, LinearProgress} 
 import DesignsAxios from '../axios/DesignsAxios';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 
 const CreateDesignForm = () => {
   const navigate = useNavigate();
@@ -59,6 +60,14 @@ const CreateDesignForm = () => {
 
   return (
     <Box p={4} component="form" onSubmit={handleSubmit}>
+      <Button
+        variant="text"
+        startIcon={<ArrowBackIcon />}
+        onClick={() => navigate('/designs')}
+        sx={{ mb: 3 }}
+      >
+        Back to Designs
+      </Button>
       <Typography variant="h5" mb={2}>Upload New Design</Typography>
       <TextField
         label="Title"

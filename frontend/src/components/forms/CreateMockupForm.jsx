@@ -3,6 +3,7 @@ import { TextField, Button, Box, Typography, IconButton, Select, MenuItem, FormC
 import CloseIcon from '@mui/icons-material/Close';
 import MockupsAxios from '../axios/MockupsAxios'
 import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 
 const CreateMockupForm = () => {
   const navigate = useNavigate();
@@ -59,14 +60,15 @@ const CreateMockupForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUploading(true);
-
+  
     const formData = new FormData();
     formData.append('title', title);
     formData.append('color', selectedColor);
     formData.append('mockup_category', selectedCategory);
     formData.append('mockup_image', mockupImage);
     formData.append('mockup_box_image', mockupBoxImage);
-
+    formData.append('gender', gender); // Add the gender field here
+  
     try {
       await MockupsAxios.post('/', formData, {
         headers: {
@@ -77,7 +79,7 @@ const CreateMockupForm = () => {
           setProgress(percentCompleted);
         },
       });
-
+  
       setUploading(false);
       navigate('/mockups', { state: { success: true } });
     } catch (error) {
@@ -89,6 +91,14 @@ const CreateMockupForm = () => {
 
   return (
     <Box p={4} component="form" onSubmit={handleSubmit}>
+      <Button
+        variant="text"
+        startIcon={<ArrowBackIcon />}
+        onClick={() => navigate('/mockups')}
+        sx={{ mb: 3 }}
+      >
+        Back to Mockups
+      </Button>
       <Typography variant="h5" mb={2}>Upload New Mockup</Typography>
       
       {/* Title Input */}

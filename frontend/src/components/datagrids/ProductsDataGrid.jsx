@@ -272,9 +272,10 @@
 import { useState, useEffect } from 'react';
 import ProductAxios from '../axios/ProductsAxios'
 import { DataGrid } from '@mui/x-data-grid';
-import { IconButton, Avatar } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,IconButton, Avatar, Button, CircularProgress} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useNavigate } from 'react-router-dom';
 
 // Fallback image URL
 const DEFAULT_THUMBNAIL = '/path/to/generic-image.jpg';
@@ -282,6 +283,10 @@ const DEFAULT_THUMBNAIL = '/path/to/generic-image.jpg';
 function ProductsDataGrid() {
   const [products, setProducts] = useState([]);
   const [categoryTitles, setCategoryTitles] = useState({}); // To store category titles by ID
+  const navigate = useNavigate();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     // Fetch all products
@@ -345,31 +350,47 @@ function ProductsDataGrid() {
     { field: 'status', headerName: 'Status', width: 130 },
     {
       field: 'actions',
-      headerName: 'Actions',
-      width: 120,
-      renderCell: (params) => (
-        <>
-          <IconButton color="primary" onClick={() => handleEdit(params.row.id)}>
-            <EditIcon />
-          </IconButton>
-          <IconButton color="secondary" onClick={() => handleDelete(params.row.id)}>
-            <DeleteIcon />
-          </IconButton>
-        </>
-      ),
-      sortable: false,
-      filterable: false,
+    headerName: 'Actions',
+    width: 120,
+    renderCell: (params) => (
+      <>
+        <IconButton color="primary" onClick={() => handleEdit(params.row.id)}>
+          <EditIcon />
+        </IconButton>
+        <IconButton color="secondary" onClick={() => openDeleteModal(params.row)}>
+          <DeleteIcon />
+        </IconButton>
+      </>
+    ),
+    sortable: false,
+    filterable: false,
     },
   ];
 
   // Sample edit and delete handlers
   const handleEdit = (id) => {
-    console.log('Edit product:', id);
+    navigate(`/products/${id}`);
   };
 
-  const handleDelete = (id) => {
-    console.log('Delete product:', id);
+  const openDeleteModal = (product) => {
+    setProductToDelete(product);
+    setDeleteModalOpen(true);
   };
+  
+  // Confirm deletion process
+  const confirmDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await ProductAxios.delete(`/${productToDelete.id}/`);
+      setProducts((prevProducts) => prevProducts.filter((p) => p.id !== productToDelete.id));
+      setDeleteModalOpen(false);
+      setIsDeleting(false);
+    } catch (error) {
+      console.error(`Error deleting product ID ${productToDelete.id}:`, error);
+      setIsDeleting(false);
+    }
+  };
+
 
   return (
     <div style={{ height: 600, width: '100%' }}>
@@ -379,6 +400,22 @@ function ProductsDataGrid() {
         pageSize={10}
         getRowId={(row) => row.id}
       />
+  
+      {/* Delete Confirmation Modal */}
+      <Dialog open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
+        <DialogTitle>Delete Product</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete the product "{productToDelete?.title}"? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteModalOpen(false)} disabled={isDeleting}>Cancel</Button>
+          <Button color="error" onClick={confirmDelete} disabled={isDeleting}>
+            {isDeleting ? <CircularProgress size={24} /> : 'Yes, Delete'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
